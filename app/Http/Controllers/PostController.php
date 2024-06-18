@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -13,8 +14,8 @@ class PostController extends Controller
     public function index()
     {
         //get all posts from database
-        $posts = Post::all();
-        return view('posts.index', ['posts' => $posts]);
+        $data['posts'] = auth()->user()->posts()->get();
+        return view('posts.index', $data);
     }
 
     /**
@@ -31,6 +32,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(['name' => 'required|max:255|min:5', 'age' => 'required|max:140', 'content' => 'required|min:10']);
+        $validated['user_id'] = $request->user()->id;
         Post::create($validated);
         return redirect()->route('posts.index');
     }

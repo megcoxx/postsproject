@@ -1,5 +1,6 @@
 <x-layout>
     <x-header style="float: left">All Posts</x-header>
+    @auth
     <div style="float: right">
         <div class="mt-4">
             <a href="/posts/create" type="button"
@@ -7,6 +8,7 @@
                 New +</a>
         </div>
     </div>
+    @endauth
     <br>
     <br>
     <br>

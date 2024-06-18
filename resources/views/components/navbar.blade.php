@@ -1,3 +1,11 @@
+{{-- <nav class="auth-nav flex justify-end bg-pink">
+    <div class=max-w-screen-xl"
+        @auth <x-navbar-link href="{{ route('logout') }}" onclick='this.parentNode.submit()'>Logout</x-navbar-link>
+        @else
+            <x-navbar-link href="{{ route('login') }}">Log In</x-navbar-link> @endauth
+        </div>
+</nav> --}}
+
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -20,6 +28,20 @@
                 class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                 <x-navbar-link href="/" :active="request()->is('/')">Home</x-navbar-link>
                 <x-navbar-link href="/posts" :active="request()->is('posts')">Posts</x-navbar-link>
+                @auth
+                    <x-navbar-link href="{{ route('login.show') }}" :active="request()->is('login.show')">Profile</x-navbar-link>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-navbar-link href="{{ route('register') }}" :active="false"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            Logout
+                        </x-navbar-link>
+                    </form>
+                @else
+                    <x-navbar-link href="{{ route('login') }}" :active="request()->is('login')">Login</x-navbar-link>
+                    <x-navbar-link href="{{ route('register') }}" :active="request()->is('register')">Register</x-navbar-link>
+                @endauth
+
             </ul>
         </div>
     </div>
