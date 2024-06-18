@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class LoginController extends Controller
 {
@@ -20,7 +21,7 @@ class LoginController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:8, string'
+            'password' => 'required|min:8|string'
         ]);
 
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -46,13 +47,18 @@ class LoginController extends Controller
 
     public function update(Request $request)
     {
-        $user = auth()->user();
+        $user = $request->user();
         $validated = $request->validate([
-            'email' => 'required|email',
-            'name' => 'required|min:5, string'
+            'name' => 'required|max:255|min:5',
+            'email' => [
+                'required',
+                'max:140',
+                'email',
+                Rule::unique('users','email')->ignore($user->id),
+            ],
         ]);
         $user->update($validated);
-        return view('user.show', ['user'=>$user]);
+        return to_route('login.show', ['user' => $user]);
     }
 
     public function logout(Request $request)

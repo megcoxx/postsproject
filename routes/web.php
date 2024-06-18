@@ -21,8 +21,8 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/user/show', [LoginController::class, 'show'])->name('login.show');
+    Route::get('/user', [LoginController::class, 'show'])->name('login.show');
     Route::get('/user/edit', [LoginController::class, 'edit'])->name('login.edit');
-    Route::put('/user/update', [LoginController::class, 'update'])->name('login.update');
+    Route::patch('/user', [LoginController::class, 'update'])->name('login.update');
     Route::resource('posts', PostController::class);
 });
